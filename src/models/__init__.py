@@ -6,5 +6,22 @@ from models.team import Team
 from models.match import Match
 from models.player import Player
 from models.player_team_history import PlayerTeamHistory
+from models.set import Set
+from models.throw_event import ThrowEvent
+from models.catch_event import CatchEvent
 
-__all__ = ["Base", "Competition", "Match", "Organisation", "TeamCompetition", "Team", "Player", "PlayerTeamHistory"]
+
+__all__ = [
+    "Base",
+    "Competition",
+    "Match",
+    "Organisation",
+    "TeamCompetition",
+    "Team",
+    "Player",
+    "PlayerTeamHistory",
+    "Set",
+    "SetEvent",
+    "ThrowEvent",
+    "CatchEvent",
+]
