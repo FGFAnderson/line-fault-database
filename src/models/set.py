@@ -14,5 +14,3 @@ class Set(BaseModel):
     end_time: Mapped[Optional[datetime]]
     
     winning_team_id: Mapped[Optional[int]]
-    final_team1_players: Mapped[int]
-    
