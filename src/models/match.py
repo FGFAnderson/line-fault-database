@@ -1,18 +1,20 @@
 from datetime import datetime
 from enum import Enum
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import DateTime, ForeignKey, SmallInteger
 from sqlalchemy import Enum as SQLEnum
-from models.base import Base
+from models.base import BaseModel
 
+if TYPE_CHECKING:
+    from models.competition import Competition
 class MatchStatus(str, Enum):
     SCHEDULED = "scheduled"
     LIVE = "live"
     COMPLETED = "completed"
     CANCELLED = "cancelled"
 
-class Match(Base):
+class Match(BaseModel):
     """ A match in a league or competion """
     
     __tablename__ = "matches"

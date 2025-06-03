@@ -1,10 +1,10 @@
 from typing import List, Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String
-from models.base import Base
+from models.base import BaseModel
 from models.team_competition import TeamCompetition
 
-class Team(Base):
+class Team(BaseModel):
     """ A team which competes in competitions """
     
     __tablename__ = "teams"

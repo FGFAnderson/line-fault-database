@@ -3,7 +3,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String
 from sqlalchemy import Enum as SQLEnum
-from models.base import Base
+from models.base import BaseModel
 from models.competition import Competition
 
 class CountryCode(str, Enum):
@@ -65,7 +65,7 @@ class CountryCode(str, Enum):
     CI = "CI"
 
 
-class Organisation(Base):
+class Organisation(BaseModel):
     """ A league or tournament organiser """
     
     __tablename__ = "organisations"

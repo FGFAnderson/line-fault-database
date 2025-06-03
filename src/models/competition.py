@@ -1,10 +1,14 @@
 from enum import Enum
-from typing import List
+from typing import TYPE_CHECKING, List
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey, String
 from sqlalchemy import Enum as SQLEnum
-from models.base import Base
-from models.match import Match
+from models.base import BaseModel
+
+if TYPE_CHECKING:
+    from models.organisation import Organisation
+    from models.team_competition import TeamCompetition
+    from models.match import Match
 
 class CompetitionFormat(str, Enum):
     LEAGUE = "league"
@@ -22,7 +26,7 @@ class CourtSize(str, Enum):
     EDF = "edf"
     NO_NEUTRAL_ZONE = "no_neutral_zone"
 
-class Competition(Base):
+class Competition(BaseModel):
     """ A season or tournament """
     
     __tablename__ = "competitions"

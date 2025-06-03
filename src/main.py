@@ -2,7 +2,6 @@ import os
 from dotenv import load_dotenv, find_dotenv
 from sqlalchemy import create_engine
 from models import Base
-from sqlalchemy_utils import database_exists, create_database
 
 load_dotenv(find_dotenv())
 
@@ -13,9 +12,5 @@ database_name = os.getenv("DATABASE_NAME")
 database_url = os.getenv("DATABASE_URL")
 
 engine = create_engine(f"postgresql://{username}:{password}@{database_url}:{port}/{database_name}", echo=True)
-
-engine = create_engine("postgresql://localhost/mydb")
-if not database_exists(engine.url):
-    create_database(engine.url)
 
 Base.metadata.create_all(engine)
