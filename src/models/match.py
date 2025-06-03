@@ -24,7 +24,7 @@ class Match(BaseModel):
     competition_id: Mapped[int] = mapped_column(ForeignKey("competitions.id"))
     team1_id: Mapped[int] = mapped_column(ForeignKey("teams.id"))
     team2_id: Mapped[int] = mapped_column(ForeignKey("teams.id"))
-    match_date: Mapped[datetime] = mapped_column(DateTime)
+    match_date: Mapped[datetime]
     status: Mapped["MatchStatus"] = mapped_column(SQLEnum(MatchStatus))
 
     def __repr__(self) -> str:

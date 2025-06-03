@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import TYPE_CHECKING, Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import DateTime, ForeignKey
+from sqlalchemy import ForeignKey
 from models.base import BaseModel
 
 if TYPE_CHECKING:
@@ -15,8 +15,8 @@ class PlayerTeamHistory(BaseModel):
     id: Mapped[int] = mapped_column(primary_key=True)
     player_id: Mapped[int] = mapped_column(ForeignKey("players.id"))
     team_id: Mapped[int] = mapped_column(ForeignKey("teams.id"))
-    joined_at: Mapped[datetime] = mapped_column(DateTime())
-    left_at: Mapped[Optional[datetime]] = mapped_column(DateTime())
-
+    joined_at: Mapped[datetime]
+    left_at: Mapped[Optional[datetime]]
+    
     player: Mapped["Player"] = relationship(back_populates="team_history")
     team: Mapped["Team"] = relationship(back_populates="teams")
