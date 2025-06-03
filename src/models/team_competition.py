@@ -25,7 +25,7 @@ class TeamCompetition(BaseModel):
     competition: Mapped["Competition"] = relationship(back_populates="team_competitions")
     
     __table_args__ = (
-        Index('ix_team_competition_unique', 'team_id', 'competition_id', unique=True),
+        Index("ix_team_competition_unique", "team_id", "competition_id", unique=True),
     )
     
     def __repr__(self) -> str:
