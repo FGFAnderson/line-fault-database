@@ -5,7 +5,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import DateTime, ForeignKey, SmallInteger
 from sqlalchemy import Enum as SQLEnum
 from models.base import Base
-from models.competition import Competition
 
 class MatchStatus(str, Enum):
     SCHEDULED = "scheduled"

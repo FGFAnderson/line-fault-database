@@ -4,8 +4,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey, String
 from sqlalchemy import Enum as SQLEnum
 from models.base import Base
-from models.organistation import Organisation
-from models.team_competition import TeamCompetition
 from models.match import Match
 
 class CompetitionFormat(str, Enum):

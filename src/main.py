@@ -1,7 +1,8 @@
 import os
 from dotenv import load_dotenv, find_dotenv
-from sqlalchemy import text, create_engine
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy import create_engine
+from models import Base
+from sqlalchemy_utils import database_exists, create_database
 
 load_dotenv(find_dotenv())
 
@@ -11,13 +12,10 @@ port = os.getenv("DATABASE_PORT")
 database_name = os.getenv("DATABASE_NAME")
 database_url = os.getenv("DATABASE_URL")
 
-engine = create_engine(f"postgresql://{username}:{password}@{database_url}:{port}/", echo=True)
+engine = create_engine(f"postgresql://{username}:{password}@{database_url}:{port}/{database_name}", echo=True)
 
-class Base(DeclarativeBase):
-    pass
+engine = create_engine("postgresql://localhost/mydb")
+if not database_exists(engine.url):
+    create_database(engine.url)
 
-try:
-    with engine.connect() as connection:
-        print("Connection successful!")
-except Exception as e:
-    print(f"Connection failed: {e}")
+Base.metadata.create_all(engine)

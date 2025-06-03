@@ -2,9 +2,6 @@ from datetime import datetime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import DateTime, ForeignKey, Index, SmallInteger, func
 from models.base import Base
-from models.competition import Competition
-from models.team import Team
-
 class TeamCompetition(Base):
     """Junction table for teams participating in competitions"""
     __tablename__ = "team_competitions"
