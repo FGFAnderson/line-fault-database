@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import TYPE_CHECKING
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import DateTime, ForeignKey, Index, SmallInteger, func
+from sqlalchemy import DateTime, ForeignKey, Index, func
 from models.base import BaseModel
 
 if TYPE_CHECKING:
@@ -17,10 +17,6 @@ class TeamCompetition(BaseModel):
     competition_id: Mapped[int] = mapped_column(ForeignKey("competitions.id"), nullable=False)
     joined_date: Mapped[datetime] = mapped_column(DateTime, default=func.now())
     
-    points: Mapped[int] = mapped_column(SmallInteger, default=0)
-    wins: Mapped[int] = mapped_column(SmallInteger, default=0)
-    losses: Mapped[int] = mapped_column(SmallInteger, default=0)
-    draws: Mapped[int] = mapped_column(SmallInteger, default=0)
     team: Mapped["Team"] = relationship(back_populates="team_competitions")
     competition: Mapped["Competition"] = relationship(back_populates="team_competitions")
     
