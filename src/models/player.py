@@ -20,7 +20,7 @@ class Player(BaseModel):
     last_name: Mapped[str] = mapped_column(String(50))
     nationality: Mapped[Optional[str]] = mapped_column(SQLEnum(CountryCode))
     
-    team_history: Mapped[List["PlayerTeamHistory"]] = relationship(back_populates="player")
+    team_history: Mapped[List["PlayerTeamHistory"]] = relationship(back_populates="players")
     
     def __repr__(self) -> str:
         return f"<Player(id={self.id}, first_name='{self.first_name}' last_name='{self.last_name}' country_code='{self.nationality}')>"
