@@ -14,7 +14,7 @@ class MovementEvent(BaseModel):
 
     __tablename__ = "movement_events"
 
-    set_id: Mapped[int] = mapped_column(ForeignKey("sets.id"), primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
     player_id: Mapped[int] = mapped_column(ForeignKey("players.id"))
     timestamp: Mapped[datetime]
     start_x: Mapped[float]

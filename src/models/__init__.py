@@ -9,7 +9,7 @@ from models.player_team_history import PlayerTeamHistory
 from models.set import Set
 from models.throw_event import ThrowEvent
 from models.catch_event import CatchEvent
-
+from models.elimination_event import EliminationEvent
 
 __all__ = [
     "Base",
@@ -22,6 +22,7 @@ __all__ = [
     "PlayerTeamHistory",
     "Set",
     "SetEvent",
+    "EliminationEvent",
     "ThrowEvent",
     "CatchEvent",
 ]

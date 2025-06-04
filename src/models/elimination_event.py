@@ -19,18 +19,17 @@ if TYPE_CHECKING:
     from models.catch_event import CatchEvent
     from models.set import Set
 
-class Elimination(BaseModel):
+class EliminationEvent(BaseModel):
     """ An elimination be caused by a throw, catch or other found in the EliminationCause enum """
     
     __tablename__ = "eliminations"
     
     id: Mapped[int] = mapped_column(primary_key=True)
-    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"))
     set_id: Mapped[int] = mapped_column(ForeignKey("sets.id"))
     eliminated_player_id: Mapped[int] = mapped_column(ForeignKey("players.id"))
     cause: Mapped[EliminationCause]
-    throw_event_id: Mapped[Optional[int]] = mapped_column(ForeignKey("throw_events.event_id"))
-    catch_event_id: Mapped[Optional[int]] = mapped_column(ForeignKey("catch_events.event_id"))
+    throw_event_id: Mapped[Optional[int]] = mapped_column(ForeignKey("throw_events.id"))
+    catch_event_id: Mapped[Optional[int]] = mapped_column(ForeignKey("catch_events.id"))
     elimination_location_x: Mapped[Optional[float]]
     elimination_location_y: Mapped[Optional[float]]
     
