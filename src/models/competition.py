@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, list
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey, String
 from sqlalchemy import Enum as SQLEnum
@@ -38,11 +38,11 @@ class Competition(BaseModel):
     organisation: Mapped["Organisation"] = relationship(back_populates="competitions")
     age_category: Mapped["AgeCategory"] = mapped_column(SQLEnum(AgeCategory))
     court_size: Mapped["CourtSize"] = mapped_column(SQLEnum(CourtSize))
-    matches: Mapped[List["Match"]] = relationship(
+    matches: Mapped[list["Match"]] = relationship(
         back_populates="competition",
         cascade="all, delete-orphan"
     )
-    team_competitions: Mapped[List["TeamCompetition"]] = relationship(
+    team_competitions: Mapped[list["TeamCompetition"]] = relationship(
         back_populates="competition",
         cascade="all, delete-orphan"
     )

@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String
 from models.base import BaseModel
@@ -13,7 +13,7 @@ class Team(BaseModel):
     name: Mapped[str] = mapped_column(String(120))
     logo_url: Mapped[Optional[str]] = mapped_column(String(2048))
     
-    team_competitions: Mapped[List["TeamCompetition"]] = relationship(
+    team_competitions: Mapped[list["TeamCompetition"]] = relationship(
         back_populates="team",
         cascade="all, delete-orphan"
     )

@@ -1,5 +1,5 @@
 from enums.country_codes import CountryCode
-from typing import List, Optional
+from typing import Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String
 from sqlalchemy import Enum as SQLEnum
@@ -19,7 +19,7 @@ class Organisation(BaseModel):
     website: Mapped[Optional[str]] = mapped_column(String(2048))
     logo_url: Mapped[Optional[str]] = mapped_column(String(2048))
     
-    competitions: Mapped[List["Competition"]] = relationship(back_populates="organisation")
+    competitions: Mapped[list["Competition"]] = relationship(back_populates="organisation")
     
     def __repr__(self) -> str:
         return f"<Organisation(id={self.id}, name='{self.name}', country='{self.country_code}')>"
