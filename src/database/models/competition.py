@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import TYPE_CHECKING, list
+from typing import TYPE_CHECKING
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey, String
 from sqlalchemy import Enum as SQLEnum
