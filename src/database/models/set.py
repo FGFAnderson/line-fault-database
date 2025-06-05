@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import ForeignKey
-from models.base import BaseModel
+from .base import BaseModel
 
 class Set(BaseModel):
     
