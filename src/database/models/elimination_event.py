@@ -2,7 +2,7 @@ from enum import Enum
 from typing import TYPE_CHECKING, Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey
-from models.base import BaseModel
+from .base import BaseModel
 
 class EliminationCause(str, Enum):
     DIRECT_HIT = "direct_hit"
@@ -14,10 +14,8 @@ class EliminationCause(str, Enum):
     LOSS_OF_CONTROL = "loss_of_control" 
 
 if TYPE_CHECKING:
-    from models.player import Player
-    from models.throw_event import ThrowEvent
-    from models.catch_event import CatchEvent
-    from models.set import Set
+    from .player import Player
+    from .set import Set
 
 class EliminationEvent(BaseModel):
     """ An elimination be caused by a throw, catch or other found in the EliminationCause enum """
@@ -34,8 +32,6 @@ class EliminationEvent(BaseModel):
     elimination_location_y: Mapped[Optional[float]]
     
     eliminated_player: Mapped["Player"] = relationship()
-    throw_event: Mapped[Optional["ThrowEvent"]] = relationship(back_populates="eliminations")
-    catch_event: Mapped[Optional["CatchEvent"]] = relationship(back_populates="eliminations")
     set: Mapped["Set"] = relationship()
     
     def __repr__(self) -> str:

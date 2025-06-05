@@ -4,10 +4,10 @@ from typing import TYPE_CHECKING
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey
 from sqlalchemy import Enum as SQLEnum
-from models.base import BaseModel
+from .base import BaseModel
 
 if TYPE_CHECKING:
-    from models.competition import Competition
+    from .competition import Competition
 class MatchStatus(str, Enum):
     SCHEDULED = "scheduled"
     LIVE = "live"

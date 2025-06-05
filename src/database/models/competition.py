@@ -3,12 +3,12 @@ from typing import TYPE_CHECKING
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey, String
 from sqlalchemy import Enum as SQLEnum
-from models.base import BaseModel
+from .base import BaseModel
 
 if TYPE_CHECKING:
-    from models.organisation import Organisation
-    from models.team_competition import TeamCompetition
-    from models.match import Match
+    from .organisation import Organisation
+    from .team_competition import TeamCompetition
+    from .match import Match
 
 class CompetitionFormat(str, Enum):
     LEAGUE = "league"

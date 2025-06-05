@@ -2,11 +2,10 @@ from datetime import datetime
 from typing import TYPE_CHECKING, Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey
-from models.base import BaseModel
+from .base import BaseModel
 
 if TYPE_CHECKING:
-    from models.team import Team
-    from models.player import Player
+    from .player import Player
 
 class PlayerTeamHistory(BaseModel):
     __tablename__ = "player_team_history"
@@ -19,4 +18,3 @@ class PlayerTeamHistory(BaseModel):
     left_at: Mapped[Optional[datetime]]
     
     player: Mapped["Player"] = relationship(back_populates="team_history")
-    team: Mapped["Team"] = relationship(back_populates="teams")

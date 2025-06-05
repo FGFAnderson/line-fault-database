@@ -1,8 +1,8 @@
 from typing import Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String
-from models.base import BaseModel
-from models.team_competition import TeamCompetition
+from .base import BaseModel
+from .team_competition import TeamCompetition
 
 class Team(BaseModel):
     """ A team which competes in competitions """

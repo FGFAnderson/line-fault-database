@@ -2,10 +2,10 @@ from datetime import datetime
 from typing import TYPE_CHECKING, Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey
-from models.base import BaseModel
+from .base import BaseModel
 
 if TYPE_CHECKING:
-    from models.set import Set
+    from .set import Set
 
 class ThrowEvent(BaseModel):
     """ A throw in a set of dodgeball """

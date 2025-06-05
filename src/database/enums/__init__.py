@@ -1,3 +1,3 @@
-from enums.country_codes import CountryCode
+from .country_codes import CountryCode
 
 __all__ = ["CountryCode"]

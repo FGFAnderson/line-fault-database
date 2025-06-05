@@ -2,11 +2,11 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import DateTime, ForeignKey, Index, func
-from models.base import BaseModel
+from .base import BaseModel
 
 if TYPE_CHECKING:
-    from models.competition import Competition
-    from models.team import Team
+    from .competition import Competition
+    from .team import Team
 
 class TeamCompetition(BaseModel):
     """Junction table for teams participating in competitions"""
