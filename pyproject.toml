@@ -16,7 +16,7 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["database*", "api*", "crud*"]  # Explicitly include all your packages
+include = ["database*", "api*", "crud*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
