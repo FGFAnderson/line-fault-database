@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "line-fault-database"
+version = "0.1.0"
+description = "Line fault database management system"
+requires-python = ">=3.8"
+dependencies = [
+    "sqlalchemy",
+    "psycopg2-binary",
+    "python-dotenv",
+    "pytest",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["database*", "api*", "crud*"]  # Explicitly include all your packages
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["--verbose"]
