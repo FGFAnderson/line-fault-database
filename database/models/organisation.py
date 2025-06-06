@@ -19,7 +19,7 @@ class Organisation(BaseModel):
     website: Mapped[Optional[str]] = mapped_column(String(2048))
     logo_url: Mapped[Optional[str]] = mapped_column(String(2048))
     
-    competitions: Mapped[Optional[list["Competition"]]] = relationship(back_populates="organisation")
+    competitions: Mapped[list["Competition"]] = relationship(back_populates="organisation")
     
     def __repr__(self) -> str:
         return f"<Organisation(id={self.id}, name='{self.name}', country='{self.country_code}')>"
