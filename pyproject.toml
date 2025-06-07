@@ -12,6 +12,7 @@ dependencies = [
     "psycopg2-binary",
     "python-dotenv",
     "pytest",
+    "sqlalchemy-utils",
 ]
 
 [tool.setuptools.packages.find]

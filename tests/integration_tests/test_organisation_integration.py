@@ -1,25 +1,25 @@
-from sqlalchemy.exc import IntegrityError, DataError
 import pytest
+from sqlalchemy.exc import IntegrityError, DataError
 from database.enums.country_codes import CountryCode
 from database.models.organisation import Organisation
 
 
 def test_create_organisation_in_db(sample_organisation_object, test_db_session):
-    """Tests the creation of an organisation in the database"""
+    """Tests creating an organisation in the database"""
     test_db_session.add(sample_organisation_object)
     test_db_session.flush()
     
     assert sample_organisation_object.id is not None
 
-    found_org = test_db_session.query(Organisation).filter_by(
+    created_org = test_db_session.query(Organisation).filter_by(
         name=sample_organisation_object.name
     ).first()
-    
-    assert found_org is not None
-    assert found_org.name == sample_organisation_object.name
-    assert found_org.country_code == sample_organisation_object.country_code
-    assert found_org.website == sample_organisation_object.website
-    assert found_org.logo_url == sample_organisation_object.logo_url
+
+    assert created_org is not None
+    assert created_org.name == sample_organisation_object.name
+    assert created_org.country_code == sample_organisation_object.country_code
+    assert created_org.website == sample_organisation_object.website
+    assert created_org.logo_url == sample_organisation_object.logo_url
 
 def test_organisation_country_code_enum_constraint(test_db_session):
     """Tests creating an organisation with an invalid country code"""
@@ -53,3 +53,47 @@ def test_organisation_unique_name_constraint(test_db_session):
     test_db_session.add(org2)
     with pytest.raises(IntegrityError, match="duplicate key value violates unique constraint"):
         test_db_session.flush()
+
+def test_organisation_create_then_delete_from_database(test_db_session, sample_organisation_object):
+    """Tests creating then deleting an organisation from the database"""
+    test_db_session.add(sample_organisation_object)
+    test_db_session.flush()
+    
+    assert sample_organisation_object.id is not None
+    created_org = test_db_session.query(Organisation).filter_by(
+        id=sample_organisation_object.id
+    ).first()
+    
+    assert created_org is not None
+    assert created_org.name == sample_organisation_object.name
+    
+    test_db_session.delete(sample_organisation_object)
+    test_db_session.flush()
+    
+    deleted_org = test_db_session.query(Organisation).filter_by(
+        id=created_org.id
+    ).first()
+    
+    assert deleted_org is None
+    
+def test_create_then_update_from_database(test_db_session, sample_organisation_object):
+    test_db_session.add(sample_organisation_object)
+    test_db_session.flush()
+    
+    assert sample_organisation_object.id is not None
+    created_org = test_db_session.query(Organisation).filter_by(
+        id=sample_organisation_object.id
+    ).first()
+    
+    assert created_org is not None
+    assert created_org.name == sample_organisation_object.name
+    
+    created_org.name = "New name"
+    test_db_session.flush()
+    updated_org = test_db_session.query(Organisation).filter_by(
+        id=created_org.id
+    ).first()
+    
+    assert updated_org.name == "New name"
+    
+    

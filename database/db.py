@@ -4,7 +4,8 @@ from typing import Generator
 from dotenv import load_dotenv, find_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from .models import Base
+from database.models import Base
+from sqlalchemy_utils import database_exists, create_database
 
 load_dotenv(find_dotenv())
 
@@ -18,6 +19,10 @@ DATABASE_URL = f"postgresql://{username}:{password}@{database_host}:{port}/{data
 
 engine = create_engine(DATABASE_URL, echo=True)
 session_maker = sessionmaker(bind=engine)
+
+def create_db():
+    if not database_exists(engine.url):
+        create_database(engine.url)
 
 def create_schema():
     Base.metadata.create_all(engine)
@@ -33,5 +38,6 @@ def get_db_session() -> Generator:
         raise
     finally:
         session.close()
-        
+
+create_db()
 create_schema()
