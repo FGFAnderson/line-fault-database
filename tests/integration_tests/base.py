@@ -1,0 +1,65 @@
+from typing import Type
+from sqlalchemy import Column, inspect, Enum
+from sqlalchemy.orm import DeclarativeBase
+from database.models import Organisation
+
+# This class inherits any sqlalchemy model which inherits the DeclartiveBase
+class BaseORMModelTest[T: DeclarativeBase]:
+    def __init__(self, model: Type[T]):
+        self.model = model
+        
+class TestOrganisation(BaseORMModelTest[Organisation]):
+    def __init__(self):
+        super().__init__(Organisation)
+    
+test_org_obj = TestOrganisation()
+inspector = inspect(test_org_obj.model)
+
+columns = list(inspector.columns)
+pk_column = inspector.primary_key[0]
+columns.remove(pk_column) # Remove the column with the PK
+new_columns = []
+for col in columns:
+    if not col.default:
+        new_columns.append(col)
+        
+for col in columns:
+    if(type(col.type) is Enum):
+        print(list(col.type.enum_class.__members__.values())[0])
+        #print(vars(list(col.type.enum_class)[0])) # This gets us the enum and then we can pick an element or a valid enum
+        print(list(col.type.enum_class._member_map_.values())[0])
+
+    #print(vars(col.type))
+    #print("\n")
+        
+columns = new_columns
+
+# For enums we can make a function something like 'get valid enun' which could use a function to get the enum from the Column type
+# Then we need to provide an invalid enum, we can do this but looking at the type of the enum and creating an string not in the enum list
+# Or we could see how enums work in python and try and declare something like Enum.{random_string}
+# Then we use the valid enum for constructing a valid data type to be used in the creation of the type and after that we can test against it
+
+# For creating strings we can look to see if it's a str type then look at it's length property and slice a test string if needed
+# For integers we can use a predfined int
+# For dates we can just use func.now
+# For floats we can just use a predefined float
+# For unique we can test against unique
+
+# Later on we can use at constraints and try and test those
+
+#for col in columns:
+#    print(col.type.length)
+    
+    
+
+
+# Step 1: For every column which is not a PK and is not a function value Create Read Update and Delete it to test crud
+
+# If the column is not the PK or has a default value add it to the list of ediatble columns
+# Check the columns type and insert valid test data into the column
+# Then test against CRUD operations
+
+# For every column with a constraint we can try and test against the constraint 
+
+# If it's the primary key during the create we don't have to use it
+# We can also not use the optitionals and test against them, interesting things is to look for constraints and challenge them for the automatic test
