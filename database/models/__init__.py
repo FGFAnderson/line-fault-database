@@ -1,6 +1,6 @@
 from .base import Base
 from .organisation import Organisation
-from .competition import Competition  
+from .competition import Competition
 from .team_competition import TeamCompetition
 from .team import Team
 from .match import Match

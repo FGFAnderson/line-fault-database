@@ -4,32 +4,33 @@ import sqlalchemy
 from sqlalchemy.orm import DeclarativeBase
 from database.models import Organisation
 
+
 # This class inherits any sqlalchemy model which inherits the DeclartiveBase
 class BaseORMModelTest[T: DeclarativeBase]:
     def __init__(self, model: Type[T]):
         self.model = model
         self.model_inspector = inspect(model)
-    
+
     def compose_valid_model_obj(self):
         # Create a copy of the model's columns
         columns = list(self.model_inspector.columns)
         # Remove the primary key from the list as that's autoincremented so doesn't need to be set
         columns.remove(self.model_inspector.primary_key[0])
-        
+
         self.get_valid_data_for_column(columns[0])
         print(type(columns[0].type))
-    
+
     def get_valid_data_for_column(self, column):
         match type(column.type):
             case sqlalchemy.sql.sqltypes.String:
                 print("String!")
-              
-                
-        
+
+
 class TestOrganisation(BaseORMModelTest[Organisation]):
     def __init__(self):
         super().__init__(Organisation)
-    
+
+
 test_org_obj = TestOrganisation()
 test_org_obj.compose_valid_model_obj()
 
@@ -38,20 +39,20 @@ inspector = inspect(test_org_obj.model)
 
 columns = list(inspector.columns)
 pk_column = inspector.primary_key[0]
-columns.remove(pk_column) # Remove the column with the PK
+columns.remove(pk_column)  # Remove the column with the PK
 new_columns = []
 for col in columns:
     if not col.default:
         new_columns.append(col)
-        
-        
+
+
 for col in columns:
     if isinstance(col.type, sqlalchemy.sql.sqltypes.Enum):
         first_enum_value = col.type.enums[0]
 
-    #print(vars(col.type))
-    #print("\n")
-        
+    # print(vars(col.type))
+    # print("\n")
+
 columns = new_columns
 
 # For enums we can make a function something like 'get valid enun' which could use a function to get the enum from the Column type
@@ -67,10 +68,8 @@ columns = new_columns
 
 # Later on we can use at constraints and try and test those
 
-#for col in columns:
+# for col in columns:
 #    print(col.type.length)
-    
-    
 
 
 # Step 1: For every column which is not a PK and is not a function value Create Read Update and Delete it to test crud
@@ -79,7 +78,7 @@ columns = new_columns
 # Check the columns type and insert valid test data into the column
 # Then test against CRUD operations
 
-# For every column with a constraint we can try and test against the constraint 
+# For every column with a constraint we can try and test against the constraint
 
 # If it's the primary key during the create we don't have to use it
 # We can also not use the optitionals and test against them, interesting things is to look for constraints and challenge them for the automatic test

@@ -1,6 +1,6 @@
-
 import pytest
 from database.models.organisation import Organisation
+
 
 @pytest.fixture()
 def sample_organisation_data():
@@ -9,9 +9,10 @@ def sample_organisation_data():
         "country_code": "EN",
         "region": "South",
         "website": "test.com",
-        "logo_url": "test.com/image.png"
+        "logo_url": "test.com/image.png",
     }
-    
+
+
 @pytest.fixture()
 def sample_organisation_object():
     return Organisation(
@@ -19,5 +20,5 @@ def sample_organisation_object():
         country_code="GB",
         region="South",
         website="test.com",
-        logo_url="test.com/image.png"
+        logo_url="test.com/image.png",
     )

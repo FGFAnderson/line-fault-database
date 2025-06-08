@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class CountryCode(str, Enum):
-    WLD = "WLD" # World country code for international events
+    WLD = "WLD"  # World country code for international events
     ENG = "ENG"
     SCO = "SCO"
     WAL = "WAL"

@@ -8,17 +8,20 @@ from .base import BaseModel
 
 if TYPE_CHECKING:
     from .competition import Competition
+
+
 class MatchStatus(str, Enum):
     SCHEDULED = "scheduled"
     LIVE = "live"
     COMPLETED = "completed"
     CANCELLED = "cancelled"
 
+
 class Match(BaseModel):
-    """ A match in a league or competion """
-    
+    """A match in a league or competion"""
+
     __tablename__ = "matches"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
     competition: Mapped["Competition"] = relationship(back_populates="matches")
     competition_id: Mapped[int] = mapped_column(ForeignKey("competitions.id"))

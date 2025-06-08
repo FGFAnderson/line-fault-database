@@ -10,9 +10,11 @@ if TYPE_CHECKING:
     from .team_competition import TeamCompetition
     from .match import Match
 
+
 class CompetitionFormat(str, Enum):
     LEAGUE = "league"
     TOURNAMENT = "tournament"
+
 
 class AgeCategory(str, Enum):
     U11 = "u11"
@@ -20,33 +22,34 @@ class AgeCategory(str, Enum):
     U15 = "u15"
     U17 = "u17"
     ADULT = "adult"
-    
+
+
 class CourtSize(str, Enum):
     BD = "bd"
     EDF = "edf"
     NO_NEUTRAL_ZONE = "no_neutral_zone"
 
+
 class Competition(BaseModel):
-    """ A season or tournament """
-    
+    """A season or tournament"""
+
     __tablename__ = "competitions"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(120))
-    competition_format: Mapped[CompetitionFormat] = mapped_column(SQLEnum(CompetitionFormat))
+    competition_format: Mapped[CompetitionFormat] = mapped_column(
+        SQLEnum(CompetitionFormat)
+    )
     organisation_id: Mapped[int] = mapped_column(ForeignKey("organisations.id"))
     organisation: Mapped["Organisation"] = relationship(back_populates="competitions")
     age_category: Mapped["AgeCategory"] = mapped_column(SQLEnum(AgeCategory))
     court_size: Mapped["CourtSize"] = mapped_column(SQLEnum(CourtSize))
     matches: Mapped[list["Match"]] = relationship(
-        back_populates="competition",
-        cascade="all, delete-orphan"
+        back_populates="competition", cascade="all, delete-orphan"
     )
     team_competitions: Mapped[list["TeamCompetition"]] = relationship(
-        back_populates="competition",
-        cascade="all, delete-orphan"
+        back_populates="competition", cascade="all, delete-orphan"
     )
-    
+
     def __repr__(self) -> str:
         return f"<Competition(id={self.id}, name='{self.name}', format='{self.competition_format}')>"
-    

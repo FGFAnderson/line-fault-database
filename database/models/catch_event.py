@@ -8,16 +8,17 @@ if TYPE_CHECKING:
     from player import Player
     from set import Set
     from throw_event import ThrowEvent
-    
+
+
 class CatchEvent(BaseModel):
-    """" A catch in a set of dodgeball """
-    
+    """ " A catch in a set of dodgeball"""
+
     __tablename__ = "catch_events"
-   
+
     id: Mapped[int] = mapped_column(primary_key=True)
     set_id: Mapped[int] = mapped_column(ForeignKey("sets.id"))
     timestamp: Mapped[datetime]
-    player_id: Mapped[int] = mapped_column(ForeignKey("players.id")) 
+    player_id: Mapped[int] = mapped_column(ForeignKey("players.id"))
     location_x: Mapped[Optional[float]]
     location_y: Mapped[Optional[float]]
 
