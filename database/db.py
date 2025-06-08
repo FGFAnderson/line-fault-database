@@ -13,7 +13,7 @@ username = os.getenv("DATABASE_USERNAME")
 password= os.getenv("DATABASE_PASSWORD")
 port = os.getenv("DATABASE_PORT")
 database_name = os.getenv("DATABASE_NAME")
-database_host = os.getenv("DATABASE_URL")
+database_host = os.getenv("DATABASE_HOST")
 
 DATABASE_URL = f"postgresql://{username}:{password}@{database_host}:{port}/{database_name}"
 
