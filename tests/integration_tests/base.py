@@ -3,6 +3,7 @@ from sqlalchemy import Column, inspect, Enum
 import sqlalchemy
 from sqlalchemy.orm import DeclarativeBase
 from database.models import Organisation
+from datetime import datetime
 
 
 # This class inherits any sqlalchemy model which inherits the DeclartiveBase
@@ -14,16 +15,39 @@ class BaseORMModelTest[T: DeclarativeBase]:
     def compose_valid_model_obj(self):
         # Create a copy of the model's columns
         columns = list(self.model_inspector.columns)
-        # Remove the primary key from the list as that's autoincremented so doesn't need to be set
+        # Remove the primary key from the list as that's autoincremented so doesn't need to be set, look into advancing this later to handle compound keys
         columns.remove(self.model_inspector.primary_key[0])
 
-        self.get_valid_data_for_column(columns[0])
-        print(type(columns[0].type))
+        model_kwargs = {}
 
-    def get_valid_data_for_column(self, column):
-        match type(column.type):
-            case sqlalchemy.sql.sqltypes.String:
-                print("String!")
+        for col in columns:
+            model_kwargs[col.name] = self._get_valid_data_for_column(col)
+
+        return self.model(**model_kwargs)
+
+    def _get_valid_data_for_column(self, column):
+
+        if isinstance(column.type, sqlalchemy.Enum):
+            return column.type.enums[0]
+
+        if isinstance(column.type, sqlalchemy.CHAR):
+            length = getattr(column.type, "length", 1)
+            value = f"test_{column.name}"
+            return value.ljust(length)[:length]
+
+        elif isinstance(column.type, sqlalchemy.VARCHAR):
+            max_length = getattr(column.type, "length", 50)
+            return f"test_string_{column.name}"[:max_length]
+
+        elif isinstance(column.type, sqlalchemy.String):
+            max_length = getattr(column.type, "length", 50)
+            return f"test_string_{column.name}"[:max_length]
+
+        elif isinstance(column.type, sqlalchemy.Integer):
+            return 42
+
+        elif isinstance(column.type, sqlalchemy.DateTime):
+            return datetime.now()
 
 
 class TestOrganisation(BaseORMModelTest[Organisation]):
@@ -32,28 +56,10 @@ class TestOrganisation(BaseORMModelTest[Organisation]):
 
 
 test_org_obj = TestOrganisation()
-test_org_obj.compose_valid_model_obj()
 
 
 inspector = inspect(test_org_obj.model)
 
-columns = list(inspector.columns)
-pk_column = inspector.primary_key[0]
-columns.remove(pk_column)  # Remove the column with the PK
-new_columns = []
-for col in columns:
-    if not col.default:
-        new_columns.append(col)
-
-
-for col in columns:
-    if isinstance(col.type, sqlalchemy.sql.sqltypes.Enum):
-        first_enum_value = col.type.enums[0]
-
-    # print(vars(col.type))
-    # print("\n")
-
-columns = new_columns
 
 # For enums we can make a function something like 'get valid enun' which could use a function to get the enum from the Column type
 # Then we need to provide an invalid enum, we can do this but looking at the type of the enum and creating an string not in the enum list
