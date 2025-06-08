@@ -1,5 +1,6 @@
 from typing import Type
 from sqlalchemy import Column, inspect, Enum
+import sqlalchemy
 from sqlalchemy.orm import DeclarativeBase
 from database.models import Organisation
 
@@ -7,12 +8,32 @@ from database.models import Organisation
 class BaseORMModelTest[T: DeclarativeBase]:
     def __init__(self, model: Type[T]):
         self.model = model
+        self.model_inspector = inspect(model)
+    
+    def compose_valid_model_obj(self):
+        # Create a copy of the model's columns
+        columns = list(self.model_inspector.columns)
+        # Remove the primary key from the list as that's autoincremented so doesn't need to be set
+        columns.remove(self.model_inspector.primary_key[0])
+        
+        self.get_valid_data_for_column(columns[0])
+        print(type(columns[0].type))
+    
+    def get_valid_data_for_column(self, column):
+        match type(column.type):
+            case sqlalchemy.sql.sqltypes.String:
+                print("String!")
+              
+                
         
 class TestOrganisation(BaseORMModelTest[Organisation]):
     def __init__(self):
         super().__init__(Organisation)
     
 test_org_obj = TestOrganisation()
+test_org_obj.compose_valid_model_obj()
+
+
 inspector = inspect(test_org_obj.model)
 
 columns = list(inspector.columns)
@@ -23,11 +44,10 @@ for col in columns:
     if not col.default:
         new_columns.append(col)
         
+        
 for col in columns:
-    if(type(col.type) is Enum):
-        print(list(col.type.enum_class.__members__.values())[0])
-        #print(vars(list(col.type.enum_class)[0])) # This gets us the enum and then we can pick an element or a valid enum
-        print(list(col.type.enum_class._member_map_.values())[0])
+    if isinstance(col.type, sqlalchemy.sql.sqltypes.Enum):
+        first_enum_value = col.type.enums[0]
 
     #print(vars(col.type))
     #print("\n")
