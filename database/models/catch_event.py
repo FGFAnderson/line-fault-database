@@ -30,4 +30,4 @@ class CatchEvent(BaseModel):
     set: Mapped["Set"] = relationship()
 
     def __repr__(self) -> str:
-        return f"<CatchEvent(id={self.id}, catcher={self.player_id}, type={self.catch_type})>"
+        return f"<CatchEvent(id={self.id}, catcher={self.player_id})>"
