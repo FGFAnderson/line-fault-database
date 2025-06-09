@@ -1,10 +1,10 @@
 from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, status
-from database.repositories.organisation_repo import (
+from database.repositories.organisation import (
     OrganisationRepository,
     get_organisation_repo,
 )
-from schemas.organisation import (
+from api.v1.schemas.organisation import (
     OrganisationResponse,
     OrganisationCreate,
     OrganisationUpdate,

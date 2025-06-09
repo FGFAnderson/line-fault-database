@@ -1,8 +1,6 @@
-from typing import Generator
 from fastapi import Depends
 from database.crud.base import CRUDRepository
 from database.models.organisation import Organisation
-from sqlalchemy.orm import Session
 from database.db import get_db_session
 
 
@@ -12,8 +10,7 @@ class OrganisationRepository(CRUDRepository):
 
 
 def get_organisation_repo(
-    db: Session = Depends(get_db_session),
-) -> Generator[OrganisationRepository, None, None]:
+    session=Depends(get_db_session),
+) -> OrganisationRepository:
     """Organisation repository dependency"""
-    with db as session:
-        yield OrganisationRepository(session)
+    return OrganisationRepository(session)
