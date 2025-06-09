@@ -1,4 +1,4 @@
-from .base import Base
+from .base import BaseModel, Base
 from .organisation import Organisation
 from .competition import Competition
 from .team_competition import TeamCompetition
@@ -12,6 +12,7 @@ from .catch_event import CatchEvent
 from .elimination_event import EliminationEvent
 
 __all__ = [
+    "BaseModel",
     "Base",
     "Competition",
     "Match",

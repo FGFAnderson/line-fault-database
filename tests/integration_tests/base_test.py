@@ -4,15 +4,16 @@ import sqlalchemy
 from sqlalchemy.orm import DeclarativeBase
 from database.models import Organisation
 from datetime import datetime
+import pytest
 
 
-# This class inherits any sqlalchemy model which inherits the DeclartiveBase
-class BaseORMModelTest[T: DeclarativeBase]:
+# This class is used to autogenerate mock data for any ORM model which inherits DeclaritiveBase
+class ORMTestDataGenerator[T: DeclarativeBase]:
     def __init__(self, model: Type[T]):
         self.model = model
         self.model_inspector = inspect(model)
 
-    def compose_valid_model_obj(self):
+    def generate_valid_args_for_model(self):
         # Create a copy of the model's columns
         columns = list(self.model_inspector.columns)
         # Remove the primary key from the list as that's autoincremented so doesn't need to be set, look into advancing this later to handle compound keys
@@ -23,9 +24,17 @@ class BaseORMModelTest[T: DeclarativeBase]:
         for col in columns:
             model_kwargs[col.name] = self._get_valid_data_for_column(col)
 
-        return self.model(**model_kwargs)
+        return model_kwargs
 
-    def _get_valid_data_for_column(self, column):
+    def _get_valid_data_for_column(self, column: sqlalchemy.Column):
+        """Generates valid data for any column based on it's type
+
+        Args:
+            column (Column):
+
+        Returns:
+            Union[str, int, float, datetime, boolean]: A valid value for the column's data type.
+        """
 
         if isinstance(column.type, sqlalchemy.Enum):
             return column.type.enums[0]
@@ -46,19 +55,58 @@ class BaseORMModelTest[T: DeclarativeBase]:
         elif isinstance(column.type, sqlalchemy.Integer):
             return 42
 
+        elif isinstance(column.type, sqlalchemy.Float):
+            return 42.0
+
+        elif isinstance(column.type, sqlalchemy.Boolean):
+            return True
+
         elif isinstance(column.type, sqlalchemy.DateTime):
             return datetime.now()
 
 
-class TestOrganisation(BaseORMModelTest[Organisation]):
-    def __init__(self):
-        super().__init__(Organisation)
+class BaseORMModelTests:
+
+    model_class = None
+
+    @pytest.fixture(autouse=True)
+    def setup_base_orm_tests(self):
+        """Setup method that runs before each test."""
+        if self.model_class is None:
+            raise ValueError("model_class must be set in the inheriting test class")
+
+        self.model = self.model_class
+        self.data_generator = ORMTestDataGenerator(self.model)
+        self.inspector = inspect(self.model)
+
+    def test_create_model_in_db(self, test_db_session):
+        """Test creating a model in the database."""
+        model_data = self.data_generator.generate_valid_args_for_model()
+        model_obj = self.model(**model_data)
+
+        test_db_session.add(model_obj)
+        test_db_session.flush()
+
+        assert model_obj is not None
+
+        pk_column = self.inspector.primary_key[0]
+        pk_value = getattr(model_obj, pk_column.name)
+
+        created_model = (
+            test_db_session.query(self.model_class)
+            .filter(pk_column == pk_value)
+            .first()
+        )
+
+        assert created_model is not None
+        for key, expected_value in model_data.items():
+            actual_value = getattr(created_model, key)
+            assert actual_value == expected_value
 
 
-test_org_obj = TestOrganisation()
+class TestOrganisation(BaseORMModelTests):
 
-
-inspector = inspect(test_org_obj.model)
+    model_class = Organisation
 
 
 # For enums we can make a function something like 'get valid enun' which could use a function to get the enum from the Column type
