@@ -1,23 +1,25 @@
-from typing import Type, TypeVar
+from typing import Generic, Type, TypeVar
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from database.models import BaseModel
 
+ORMModel = TypeVar("ORMModel", bound=BaseModel)
 
-class CRUDRepository:
 
-    def __init__(self, model: Type[BaseModel], db_session: Session) -> None:
+class CRUDRepository(Generic[ORMModel]):
+
+    def __init__(self, model: Type[ORMModel], db_session: Session) -> None:
         self.db_session = db_session
         self.model = model
 
-    def create(self, **kwargs) -> BaseModel:
+    def create(self, **kwargs) -> ORMModel:
         """Creates a row in the database
 
         Args:
             self.db_session (Session): sqlalchemy Session
 
         Returns:
-            BaseModel: The model instance of the created row
+            ORMModel: The model instance of the created row
         """
         model_obj = self.model(**kwargs)
         self.db_session.add(model_obj)
@@ -25,7 +27,7 @@ class CRUDRepository:
         self.db_session.refresh(model_obj)
         return model_obj
 
-    def get_one(self, *args, **kwargs) -> BaseModel | None:
+    def get_one(self, *args, **kwargs) -> ORMModel | None:
         """Gets model instances based on filters
 
         Args:
@@ -34,7 +36,7 @@ class CRUDRepository:
             **kwargs: Equalility expresion such as name="david"
 
         Returns:
-            list[BaseModel]: _description_
+            list[ORMModel]: _description_
         """
         sql = select(self.model)
 
@@ -51,7 +53,7 @@ class CRUDRepository:
 
         return result.scalar_one_or_none()
 
-    def get_all(self, *args, **kwargs) -> list[BaseModel]:
+    def get_all(self, *args, **kwargs) -> list[ORMModel]:
         """Gets model instances based on filters
 
         Args:
@@ -60,7 +62,7 @@ class CRUDRepository:
             **kwargs: Equalility expresion such as name="david"
 
         Returns:
-            list[BaseModel]: List of model instances
+            list[ORMModel]: List of model instances
         """
 
         sql = select(self.model)
@@ -78,15 +80,15 @@ class CRUDRepository:
 
         return list(result.scalars().all())
 
-    def delete(self, model_instance: BaseModel) -> BaseModel | None:
+    def delete(self, model_instance: ORMModel) -> ORMModel | None:
         """Deletes a model in the database
 
         Args:
             self.db_session (Session): Sqlalchemy Session
-            model_instance (BaseModel): Instance of the model
+            model_instance (ORMModel): Instance of the model
 
         Returns:
-            BaseModel | None: Returns none if model not found or not parsed
+            ORMModel | None: Returns none if model not found or not parsed
         """
 
         if model_instance:
@@ -95,15 +97,15 @@ class CRUDRepository:
             return model_instance
         return None
 
-    def update(self, model_instance: BaseModel, **update_data) -> BaseModel | None:
+    def update(self, model_instance: ORMModel, **update_data) -> ORMModel | None:
         """Updates a model instance
 
         Args:
             self.db_session (Session): sqlalchemy Session
-            model_instance (BaseModel): Instance of the model
+            model_instance (ORMModel): Instance of the model
 
         Returns:
-            BaseModel | None: Returns none if model not found or not parsed
+            ORMModel | None: Returns none if model not found or not parsed
         """
         if not model_instance:
             return None

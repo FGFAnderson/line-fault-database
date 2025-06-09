@@ -16,8 +16,32 @@ class OrganisationBase(BaseModel):
         description="Extended ISO country code's with ENG, SCO, WAL, NIR, IRL and WLD (For world)",
     )
     region: Optional[str] = Field(None, max_length=100, description="Geographic region")
-    website: Optional[HttpUrl] = Field(None, description="Organisation website")
-    logo_url: Optional[HttpUrl] = Field(None, description="Logo image URL")
+    website: Optional[str] = Field(None, description="Organisation website")
+    logo_url: Optional[str] = Field(None, description="Logo image URL")
+
+
+# Requests
+class OrganisationCreate(OrganisationBase):
+    """Schema for creating new organisations"""
+
+    pass
+
+
+class OrganisationUpdate(BaseModel):
+    """Schema for updating organisations - all fields optional"""
+
+    name: Optional[str] = Field(
+        None, min_length=1, max_length=120, description="Organisation name"
+    )
+    country_code: Optional[CountryCode] = Field(
+        None, description="Extended ISO country code"
+    )
+    region: Optional[str] = Field(None, max_length=100, description="Geographic region")
+    website: Optional[str] = Field(None, description="Organisation website")
+    logo_url: Optional[str] = Field(None, description="Logo image URL")
+
+
+# Responses
 
 
 class OrganisationResponse(OrganisationBase):
