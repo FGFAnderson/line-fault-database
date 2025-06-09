@@ -13,12 +13,17 @@ from schemas.organisation import (
 router = APIRouter(prefix="/organisations", tags=["organisations"])
 
 
-@router.get("/all", response_model=list[OrganisationResponse])
+@router.get("/", response_model=list[OrganisationResponse])
 def read_all(
     repo: OrganisationRepository = Depends(get_organisation_repo),
-) -> Any:
-    """
-    Retrieve items.
+) -> list[OrganisationResponse]:
+    """Gets all of the organisations
+
+    Args:
+        repo (OrganisationRepository, optional): A object of the OrganisationRepo that handles DB actions. Defaults to Depends(get_organisation_repo).
+
+    Returns:
+        list[OrganisationResponse]: A list of all organisations in db
     """
 
     all_orgs = repo.get_all()
@@ -27,12 +32,21 @@ def read_all(
 
 
 @router.get("/{organisation_id}", response_model=OrganisationResponse)
-def get_organisations(
+def get_organisation(
     organisation_id: int,
     repo: OrganisationRepository = Depends(get_organisation_repo),
-) -> Any:
-    """
-    Retrieve item.
+) -> OrganisationResponse:
+    """Gets one organisation based on id
+
+    Args:
+        organisation_id (int): The organisation's ID
+        repo (OrganisationRepository, optional): A object of the OrganisationRepo that handles DB actions. Defaults to Depends(get_organisation_repo).
+
+    Raises:
+        HTTPException_404: Organisation not found from ID
+
+    Returns:
+        OrganisationResponse: An organisation
     """
 
     organisation = repo.get_one(id=organisation_id)
@@ -51,8 +65,18 @@ def create_organisation(
     organisation_data: OrganisationCreate,
     repo: OrganisationRepository = Depends(get_organisation_repo),
 ) -> OrganisationResponse:
-    """
-    Create a new organisation.
+    """Creates an organisation
+
+    Args:
+        organisation_data (OrganisationCreate): A dictionary or any compatiable type to be deconstructed into a **kwarg
+        repo (OrganisationRepository, optional): A object of the OrganisationRepo that handles DB actions. Defaults to Depends(get_organisation_repo).
+
+    Raises:
+        HTTPException_409: Duplicate Name, names must be unique
+        HTTPException_500: Generic failure from inner method
+
+    Returns:
+        OrganisationResponse: The created organisation
     """
     # Check if organisation name is unique
     existing = repo.get_one(name=organisation_data.name)
@@ -68,7 +92,7 @@ def create_organisation(
     if not new_organisation:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to update organisation",
+            detail="Failed to create organisation",
         )
 
     return new_organisation
@@ -80,8 +104,20 @@ def update_organisation(
     organisation_data: OrganisationUpdate,
     repo: OrganisationRepository = Depends(get_organisation_repo),
 ) -> OrganisationResponse:
-    """
-    Update an existing organisation.
+    """Updated an organisation based on it's ID
+
+    Args:
+        organisation_id (int): The organisation's ID
+        organisation_data (OrganisationUpdate): The fields to be updated, these are unpacked so e.g name="Test", country_code="EN"
+        repo (OrganisationRepository, optional): A object of the OrganisationRepo that handles DB actions. Defaults to Depends(get_organisation_repo).
+
+    Raises:
+        HTTPException_404: Organisation to update id is not found
+        HTTPException_409: New name is not unique to other Organisations
+        HTTPException_500: Internal server error
+
+    Returns:
+        OrganisationResponse: The updated object
     """
     # Get the existing organisation
     existing_org = repo.get_one(id=organisation_id)
@@ -118,8 +154,15 @@ def delete_organisation(
     organisation_id: int,
     repo: OrganisationRepository = Depends(get_organisation_repo),
 ) -> None:
-    """
-    Delete an organisation.
+    """Deletes on organisation based on ID
+
+    Args:
+        organisation_id (int): The organisation's ID
+        repo (OrganisationRepository, optional): A object of the OrganisationRepo that handles DB actions. Defaults to Depends(get_organisation_repo).
+
+    Raises:
+        HTTPException_404: Organisation to be deleted not found
+        HTTPException_500: Internal server error
     """
     # Get the existing organisation
     existing_org = repo.get_one(id=organisation_id)
@@ -136,5 +179,3 @@ def delete_organisation(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to delete organisation",
         )
-
-    return
