@@ -13,6 +13,7 @@ dependencies = [
     "python-dotenv",
     "pytest",
     "sqlalchemy-utils",
+    "fastapi[standard]"
 ]
 
 [tool.setuptools.packages.find]
