@@ -28,7 +28,7 @@ class OrganisationCreate(OrganisationBase):
 
 
 class OrganisationUpdate(BaseModel):
-    """Schema for updating organisations - all fields optional"""
+    """Schema for updating organisations"""
 
     name: Optional[str] = Field(
         None, min_length=1, max_length=120, description="Organisation name"
