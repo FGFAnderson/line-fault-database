@@ -265,13 +265,9 @@ def get_matches_by_team(
             detail=f"Team with ID {team_id} not found",
         )
 
-    # Get matches where team is either team1 or team2
-    # Note: This uses your CRUDRepository's get_all method with conditional filters
-    # You might need to enhance the base repository to handle OR conditions
     team1_matches = repo.get_all(team1_id=team_id)
     team2_matches = repo.get_all(team2_id=team_id)
 
-    # Combine and deduplicate
     all_matches = team1_matches + team2_matches
     unique_matches = {match.id: match for match in all_matches}.values()
 
