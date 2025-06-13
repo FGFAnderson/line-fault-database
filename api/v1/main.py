@@ -8,6 +8,7 @@ from api.v1.routes import (
     teams,
     set,
     elimination_event,
+    throw_event,
 )
 
 app = FastAPI()
@@ -28,3 +29,4 @@ app.include_router(teams.router)
 app.include_router(match.router)
 app.include_router(set.router)
 app.include_router(elimination_event.router)
+app.include_router(throw_event.router)
