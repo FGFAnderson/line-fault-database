@@ -9,6 +9,7 @@ from api.v1.routes import (
     set,
     elimination_event,
     throw_event,
+    catch_event,
 )
 
 app = FastAPI()
@@ -30,3 +31,4 @@ app.include_router(match.router)
 app.include_router(set.router)
 app.include_router(elimination_event.router)
 app.include_router(throw_event.router)
+app.include_router(catch_event.router)
